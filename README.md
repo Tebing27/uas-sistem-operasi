@@ -85,14 +85,14 @@ uas_kelompok7/
 cd app
 
 # Build image
-docker build -t localhost:5000/kelompok7-app:latest .
+docker build -t localhost:5000/kelompok7-app:v1 .
 ```
 
 ### Push Image ke Private Registry
 
 ```bash
 # Push image ke registry lokal
-docker push localhost:5000/kelompok7-app:latest
+docker push localhost:5000/kelompok7-app:v1
 ```
 
 ### Verifikasi Image di Registry
@@ -117,7 +117,7 @@ curl http://localhost:5000/v2/_catalog
 
 ### Menjalankan Sample App dari Registry
 ```bash
-docker run -d -p 8000:80 localhost:5000/kelompok7-app:latest
+docker run -d -p 8000:80 localhost:5000/kelompok7-app:v1
 # Akses: http://localhost:8000
 ```
 
