@@ -1,0 +1,27 @@
+services:
+  # 1. Service untuk Private Registry
+  registry:
+    image: registry:2
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./data_registry:/var/lib/registry
+      - ./registry-config.yml:/etc/docker/registry/config.yml
+    restart: unless-stopped
+
+  # 2. Service Registry Web UI
+  registry-ui:
+    image: joxit/docker-registry-ui:main
+    ports:
+      - "8080:80"
+    environment:
+      - REGISTRY_TITLE=UAS Kelompok 7
+      - REGISTRY_URL=http://localhost:5000
+      - DELETE_IMAGES=true
+      - SINGLE_REGISTRY=true
+    depends_on:
+      - registry
+    restart: unless-stopped
+
+volumes:
+  registry_data:
