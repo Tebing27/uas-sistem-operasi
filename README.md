@@ -207,5 +207,3 @@ docker-compose restart
 Project ini dibuat untuk keperluan akademik UAS Sistem Operasi.
 
 ---
-
-**Made with ❤️ by Kelompok 7**
