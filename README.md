@@ -85,7 +85,7 @@ uas_kelompok7/
 cd app
 
 # Build image
-docker build -t localhost:5000/kelompok7-app:latest .
+docker build -t localhost:5000/kelompok7-app:v1 .
 ```
 
 ### Push Image ke Private Registry
