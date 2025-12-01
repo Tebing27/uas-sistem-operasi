@@ -87,7 +87,7 @@ docker compose ps
 
 ### Screenshot Docker PS dan Logs
 
-![Docker PS dan Logs](./img/Docker%20Ps%20dan%20Docker%20Logs.png)
+![Docker PS dan Logs](./img/Docker%20ps%20dan%20Docker%20logs.png)
 
 ### Screenshot Web Application
 
