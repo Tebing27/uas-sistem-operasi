@@ -1,6 +1,6 @@
-# UAS Sistem Operasi - Kelompok 7
+# Project UAS Sistem Operasi Kelompok 7 - Private Docker Registry + Web App 
 
-## 👥 Anggota Kelompok
+## • Kelompok 7
 
 1. **Tebing Rizky Tsaniansyah** (2410501080)
 2. **Heru Chandra** (2410501094)
@@ -8,219 +8,138 @@
 4. **Radinka Alifasya Dinova** (2410501073)
 5. **Muhammad Ragil Hardika** (2410501103)
 
-## 📝 Deskripsi Project
+## • Tema Project
 
-Project ini adalah implementasi **Private Docker Registry** untuk Ujian Akhir Semester mata kuliah Sistem Operasi. Project ini menggunakan Docker dan Docker Compose untuk menjalankan layanan registry pribadi beserta web UI untuk manajemen images.
+**Private Docker Registry** - Sistem untuk menyimpan dan mengelola Docker images secara lokal menggunakan Docker Registry dengan Web UI sebagai interface visual.
 
-## 🏗️ Arsitektur
+## • Layanan dalam Project
 
-Project ini terdiri dari beberapa komponen utama:
+1. **Service 1** – Private Docker Registry (Port 5000)
+   - Service backend untuk menyimpan dan mengelola Docker images secara lokal
+   
+2. **Service 2** – Registry Web UI (Port 8080)
+   - Interface visual berbasis web untuk melihat dan mengelola image yang tersimpan di registry
+   
+3. **Service 3** – Sample Web Application (Port 8000)
+   - Aplikasi web sederhana berbasis Nginx sebagai contoh workload yang dikelola dalam sistem
 
-### 1. Private Docker Registry
+## • Arsitektur
 
-- **Image**: `registry:2`
-- **Port**: `5000`
-- **Fungsi**: Menyimpan dan mengelola Docker images secara lokal
+![Arsitektur Sistem](./img/arsitektur.png)
+**[Link Arsitektur Sistem](https://excalidraw.com/#json=gpy7-En-T_z1FiFjWk3vc,3Tu-lsh3UackSUmi1thCwQ)**
 
-### 2. Registry Web UI
-
-- **Image**: `joxit/docker-registry-ui:main`
-- **Port**: `8080`
-- **Fungsi**: Interface web untuk visualisasi dan manajemen Docker images
-- **Fitur**:
-  - Browse images
-  - Delete images
-  - View image details dan tags
-
-### 3. Sample Application
-
-- **Teknologi**: Nginx (Alpine)
-- **Fungsi**: Aplikasi web sederhana sebagai contoh deployment
-- **Konten**: Halaman informasi anggota Kelompok 7
-
-## 📂 Struktur Direktori
+**Komponen Sistem:**
 
 ```
-uas_kelompok7/
-├── app/
-│   ├── Dockerfile           # Dockerfile untuk sample app
-│   └── index.html          # Halaman web kelompok
-├── data_registry/          # Volume data untuk registry
-│   └── docker/            # Image storage
-├── docker-compose.yml      # Konfigurasi semua services
-└── registry-config.yml     # Konfigurasi Docker Registry
+┌─────────────────────┐
+│   Registry Web UI   │ (Port 8080)
+│  joxit/registry-ui  │
+└──────────┬──────────┘
+           │
+           ▼
+┌─────────────────────┐
+│  Docker Registry    │ (Port 5000)
+│    registry:2       │
+└──────────┬──────────┘
+           │
+           ▼
+    ┌──────────────┐
+    │ Volume Data  │
+    │data_registry │
+    └──────────────┘
+
+┌─────────────────────┐
+│   Web Application   │ (Port 8000)
+│   Nginx (Custom)    │
+└─────────────────────┘
 ```
 
-## 🚀 Cara Menjalankan
-
-### Prerequisites
-
-- Docker Desktop terinstall
-- Docker Compose terinstall
-
-### Langkah-langkah
-
-1. **Clone atau download repository ini**
-
-   ```bash
-   git clone <repository-url>
-   cd uas_kelompok7
-   ```
-
-2. **Jalankan semua services dengan Docker Compose**
-
-   ```bash
-   docker-compose up -d
-   ```
-
-3. **Verifikasi services berjalan**
-
-   ```bash
-   docker-compose ps
-   ```
-
-4. **Akses layanan**
-   - **Registry API**: http://localhost:5000
-   - **Registry Web UI**: http://localhost:8080
-
-## 🐳 Build dan Push Sample App
-
-### Build Docker Image untuk Sample App
+## • Cara Menjalankan
 
 ```bash
-# Masuk ke direktori app
-cd app
+# Build image dengan tag
+docker build -t localhost:5000/uas_kelompok7:v1 .
 
-# Build image
-docker build -t localhost:5000/kelompok7-app:v1 .
-```
+# Jalankan semua service
+docker compose up -d
 
-### Push Image ke Private Registry
-
-```bash
-# Push image ke registry lokal
-docker push localhost:5000/kelompok7-app:v1
-```
-
-### Verifikasi Image di Registry
-
-1. Buka browser ke http://localhost:8080
-2. Image `kelompok7-app` akan terlihat di UI
-3. Atau gunakan API:
-   ```bash
-   curl http://localhost:5000/v2/_catalog
-   ```
-
-## 📋 Perintah Berguna
-
-### Melihat Images di Registry
-
-```bash
-# Via API
-curl http://localhost:5000/v2/_catalog
-
-# Via browser
-# Buka http://localhost:8080
-```
-
-### Menjalankan Sample App dari Registry
-
-```bash
-docker run -d -p 8000:80 localhost:5000/kelompok7-app:v1
-# Akses: http://localhost:8000
-```
-
-### Menghentikan Services
-
-```bash
-docker-compose down
-```
-
-### Menghapus Data Registry (Reset)
-
-```bash
-docker-compose down -v
-rm -rf data_registry/docker/*
-```
-
-### Melihat Logs
-
-```bash
-# Semua services
-docker-compose logs -f
-
-# Registry saja
-docker-compose logs -f registry
-
-# UI saja
-docker-compose logs -f registry-ui
-```
-
-## ⚙️ Konfigurasi
-
-### Registry Configuration (`registry-config.yml`)
-
-Konfigurasi penting yang telah diatur:
-
-- **Delete enabled**: Mengizinkan penghapusan images
-- **CORS headers**: Mengizinkan akses dari Web UI (port 8080)
-- **Storage**: Menggunakan filesystem local di `/var/lib/registry`
-
-### Docker Compose Services
-
-#### Registry Service
-
-- Port mapping: `5000:5000`
-- Volume: Data disimpan di `./data_registry`
-- Auto-restart: `unless-stopped`
-
-#### Registry UI Service
-
-- Port mapping: `8080:80`
-- Environment variables:
-  - `REGISTRY_TITLE`: "UAS Kelompok 7"
-  - `DELETE_IMAGES`: Enabled
-  - `SINGLE_REGISTRY`: Enabled
-
-## 🔧 Troubleshooting
-
-### Registry tidak bisa diakses
-
-```bash
 # Cek status container
-docker-compose ps
-
-# Restart services
-docker-compose restart
+docker compose ps
 ```
 
-### Error saat push image
+**Akses layanan:**
+- **Registry API:** http://localhost:5000
+- **Registry Web UI:** http://localhost:8080
+- **Web Application:** http://localhost:8000
 
-```bash
-# Pastikan Docker daemon mengizinkan insecure registry
-# Edit Docker Desktop settings atau /etc/docker/daemon.json
-{
-  "insecure-registries": ["localhost:5000"]
-}
-```
+## • Hasil Running
 
-### Web UI tidak menampilkan images
+### Screenshot Docker Compose Up
+![Docker Compose Up](./img/Docker Compose.png)
 
-```bash
-# Cek CORS configuration di registry-config.yml
-# Pastikan Access-Control-Allow-Origin sudah benar
-```
+### Screenshot Docker Registry UI
+![Docker Registry UI](./img/Docker Registry UI.png)
 
-## 📚 Teknologi yang Digunakan
+### Screenshot Docker Build, Tag dan Push
+![Docker Build, Tag, dan Push](./img/Docker Build, Docker Tag, dan Docker Push.png)
 
-- **Docker**: Container platform
-- **Docker Compose**: Multi-container orchestration
-- **Docker Registry**: Private image storage
-- **Nginx**: Web server untuk sample app
-- **Joxit Docker Registry UI**: Web interface untuk registry
+### Screenshot Docker PS dan Logs
+![Docker PS dan Logs](./img/Docker Ps dan Docker Logs.png)
 
-## 📄 Lisensi
+### Screenshot Web Application
+![Web App](./img/Web App.png)
 
-Project ini dibuat untuk keperluan akademik UAS Sistem Operasi.
+### Screenshot CORS Configuration
+![CORS Config](./img/Curl Cors.png)
+
+## • Konfigurasi
+
+### **Dockerfile**
+Penjelasan konfigurasi Dockerfile untuk sample web application:
+- Menggunakan base image `nginx:alpine` untuk efisiensi
+- Menyalin file `index.html` dari direktori `src/` ke `/usr/share/nginx/html/`
+- Nginx berjalan sebagai foreground process
+
+### **docker-compose.yml**
+Penjelasan konfigurasi docker-compose.yml:
+
+**Service Registry:**
+- Menggunakan image `registry:2`
+- Port mapping `5000:5000`
+- Volume untuk persistensi data di `./data_registry`
+- Konfigurasi CORS dari file `registry-config.yml`
+- Restart policy: `unless-stopped`
+
+**Service Registry UI:**
+- Menggunakan image `joxit/docker-registry-ui:main`
+- Port mapping `8080:80`
+- Environment variables untuk koneksi ke registry
+- Enable delete images dan single registry mode
+- Depends on: registry service
+
+**Service Web App:**
+- Build dari Dockerfile lokal
+- Port mapping `8000:80`
+- Image tag: `localhost:5000/uas_kelompok7:v1`
+- Restart policy: `unless-stopped`
+
+## • Kendala dan Solusi
+
+### Kendala 1 → Solusi
+**Masalah:** Error saat push image ke registry - "http: server gave HTTP response to HTTPS client"
+
+**Solusi:** 
+- Mengonfigurasi Docker daemon untuk mengizinkan insecure registry
+- Menambahkan `"insecure-registries": ["localhost:5000"]` di Docker Desktop Settings atau `/etc/docker/daemon.json`
+- Restart Docker service setelah konfigurasi
+
+### Kendala 2 → Solusi
+**Masalah:** Registry Web UI tidak bisa menampilkan images karena CORS policy
+
+**Solusi:**
+- Menambahkan konfigurasi CORS di `registry-config.yml`
+- Mengatur header `Access-Control-Allow-Origin` untuk mengizinkan request dari port 8080
+- Mengatur `Access-Control-Allow-Methods` dan `Access-Control-Allow-Headers` yang diperlukan
+- Restart registry service setelah konfigurasi
 
 ---
