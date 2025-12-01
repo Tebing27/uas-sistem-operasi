@@ -17,20 +17,23 @@ Project ini adalah implementasi **Private Docker Registry** untuk Ujian Akhir Se
 Project ini terdiri dari beberapa komponen utama:
 
 ### 1. Private Docker Registry
+
 - **Image**: `registry:2`
 - **Port**: `5000`
 - **Fungsi**: Menyimpan dan mengelola Docker images secara lokal
 
 ### 2. Registry Web UI
+
 - **Image**: `joxit/docker-registry-ui:main`
 - **Port**: `8080`
 - **Fungsi**: Interface web untuk visualisasi dan manajemen Docker images
-- **Fitur**: 
+- **Fitur**:
   - Browse images
   - Delete images
   - View image details dan tags
 
 ### 3. Sample Application
+
 - **Teknologi**: Nginx (Alpine)
 - **Fungsi**: Aplikasi web sederhana sebagai contoh deployment
 - **Konten**: Halaman informasi anggota Kelompok 7
@@ -51,23 +54,27 @@ uas_kelompok7/
 ## 🚀 Cara Menjalankan
 
 ### Prerequisites
+
 - Docker Desktop terinstall
 - Docker Compose terinstall
 
 ### Langkah-langkah
 
 1. **Clone atau download repository ini**
+
    ```bash
    git clone <repository-url>
    cd uas_kelompok7
    ```
 
 2. **Jalankan semua services dengan Docker Compose**
+
    ```bash
    docker-compose up -d
    ```
 
 3. **Verifikasi services berjalan**
+
    ```bash
    docker-compose ps
    ```
@@ -85,14 +92,14 @@ uas_kelompok7/
 cd app
 
 # Build image
-docker build -t localhost:5000/kelompok7-app:latest .
+docker build -t localhost:5000/kelompok7-app:v1 .
 ```
 
 ### Push Image ke Private Registry
 
 ```bash
 # Push image ke registry lokal
-docker push localhost:5000/kelompok7-app:latest
+docker push localhost:5000/kelompok7-app:v1
 ```
 
 ### Verifikasi Image di Registry
@@ -107,6 +114,7 @@ docker push localhost:5000/kelompok7-app:latest
 ## 📋 Perintah Berguna
 
 ### Melihat Images di Registry
+
 ```bash
 # Via API
 curl http://localhost:5000/v2/_catalog
@@ -116,23 +124,27 @@ curl http://localhost:5000/v2/_catalog
 ```
 
 ### Menjalankan Sample App dari Registry
+
 ```bash
-docker run -d -p 8000:80 localhost:5000/kelompok7-app:latest
+docker run -d -p 8000:80 localhost:5000/kelompok7-app:v1
 # Akses: http://localhost:8000
 ```
 
 ### Menghentikan Services
+
 ```bash
 docker-compose down
 ```
 
 ### Menghapus Data Registry (Reset)
+
 ```bash
 docker-compose down -v
 rm -rf data_registry/docker/*
 ```
 
 ### Melihat Logs
+
 ```bash
 # Semua services
 docker-compose logs -f
@@ -157,11 +169,13 @@ Konfigurasi penting yang telah diatur:
 ### Docker Compose Services
 
 #### Registry Service
+
 - Port mapping: `5000:5000`
 - Volume: Data disimpan di `./data_registry`
 - Auto-restart: `unless-stopped`
 
 #### Registry UI Service
+
 - Port mapping: `8080:80`
 - Environment variables:
   - `REGISTRY_TITLE`: "UAS Kelompok 7"
@@ -171,6 +185,7 @@ Konfigurasi penting yang telah diatur:
 ## 🔧 Troubleshooting
 
 ### Registry tidak bisa diakses
+
 ```bash
 # Cek status container
 docker-compose ps
@@ -180,6 +195,7 @@ docker-compose restart
 ```
 
 ### Error saat push image
+
 ```bash
 # Pastikan Docker daemon mengizinkan insecure registry
 # Edit Docker Desktop settings atau /etc/docker/daemon.json
@@ -189,6 +205,7 @@ docker-compose restart
 ```
 
 ### Web UI tidak menampilkan images
+
 ```bash
 # Cek CORS configuration di registry-config.yml
 # Pastikan Access-Control-Allow-Origin sudah benar
@@ -207,5 +224,3 @@ docker-compose restart
 Project ini dibuat untuk keperluan akademik UAS Sistem Operasi.
 
 ---
-
-**Made with ❤️ by Kelompok 7**

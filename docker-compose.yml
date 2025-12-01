@@ -23,5 +23,15 @@ services:
       - registry
     restart: unless-stopped
 
+  # 3. Service Web
+  web-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: localhost:5000/kelompok7-app:v1
+    ports:
+      - "8000:80"
+    restart: unless-stopped
+
 volumes:
   registry_data:
