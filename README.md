@@ -48,20 +48,32 @@
 
 ┌─────────────────────┐
 │   Web Application   │ (Port 8000)
-│   Nginx (Custom)    │
+│       Nginx         │
 └─────────────────────┘
 ```
 
 ## • Cara Menjalankan
 
 ```bash
-# Build image dengan tag
-docker build -t localhost:5000/uas_kelompok7:v1 .
+# 1. Clone repository dari GitHub
+git clone https://github.com/tebing27/uas-sistem-operasi.git
 
-# Jalankan semua service
-docker compose up -d
+# 2. Masuk ke direktori project
+cd uas-sistem-operasi
 
-# Cek status container
+# 3. Jalankan semua service (Registry, UI, dan Web App)
+docker compose up --build -d
+
+# 4. Build image aplikasi secara manual dengan tag lokal
+docker build -t kelompok7-app:v1 .
+
+# 5. Beri tag baru agar sesuai dengan alamat local registry (localhost:5000)
+docker tag kelompok7-app:v1 localhost:5000/kelompok7-app:v1
+
+# 6. Push image tersebut ke Private Docker Registry lokal
+docker push localhost:5000/kelompok7-app:v1
+
+# 7. Cek status container untuk memastikan semua berjalan
 docker compose ps
 ```
 
@@ -75,19 +87,23 @@ docker compose ps
 
 ### Screenshot Docker Compose Up
 
-![Docker Compose Up](./img/Docker%20Compose.png)
+![Docker Compose Up](./img/Docker_Compose.png)
 
 ### Screenshot Docker Registry UI
 
-![Docker Registry UI](./img/Docker%20Registry%20UI.png)
+![Docker Registry UI](./img/Docker_Registry_UI.png)
 
-### Screenshot Docker Build, Tag dan Push
+### Screenshot Docker Build
 
-![Docker Build, Tag, dan Push](./img/Docker%20Build,%20Docker%20Tag,%20dan%20Docker%20Push.png)
+![Build](./img/Docker_Build.png)
+
+### Screenshot Docker Tag dan Push
+
+![Tag, dan Push](./img/Docker_Tag%20dan%20Docker_Push.png)
 
 ### Screenshot Docker PS dan Logs
 
-![Docker PS dan Logs](./img/Docker%20ps%20dan%20Docker%20logs.png)
+![Docker PS dan Logs](./img/Docker_PS%20dan%20Docker_Logs.png)
 
 ### Screenshot Web Application
 
@@ -95,7 +111,7 @@ docker compose ps
 
 ### Screenshot CORS Configuration
 
-![CORS Config](./img/Curl%20Cors.png)
+![CORS Config](./img/Curl_Cors.png)
 
 ## • Konfigurasi
 
