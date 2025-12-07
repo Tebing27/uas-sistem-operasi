@@ -10,7 +10,7 @@
 
 ## • Tema Project
 
-**Private Docker Registry** - Sistem untuk menyimpan dan mengelola Docker images secara lokal menggunakan Docker Registry dengan Web UI sebagai interface visual.
+**Private Docker Registry**
 
 ## • Layanan dalam Project
 
@@ -149,6 +149,17 @@ Penjelasan konfigurasi docker-compose.yml:
 - Port mapping `8000:80`
 - Image tag: `localhost:5000/uas_kelompok7:v1`
 - Restart policy: `unless-stopped`
+
+### **registry-config.yml**
+
+Penjelasan konfigurasi registry-config.yml:
+
+- **Storage:** Menggunakan driver `filesystem` dengan direktori penyimpanan di `/var/lib/registry` dan mengaktifkan fitur `delete` agar image dapat dihapus.
+- **HTTP:** Service berjalan pada port `5000`.
+- **Headers (CORS):** Menambahkan header HTTP response untuk mengizinkan Cross-Origin Resource Sharing, yang diperlukan agar web UI (port 8080) dapat mengakses API registry.
+  - `Access-Control-Allow-Origin`: Membatasi akses hanya dari `http://localhost:8080`.
+  - `Access-Control-Allow-Methods`: Mengizinkan method `HEAD`, `GET`, `OPTIONS`, `DELETE`.
+  - `Access-Control-Allow-Credentials`: Diset `true`.
 
 ## • Kendala dan Solusi
 
